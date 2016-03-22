@@ -1,0 +1,51 @@
+#! /usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+
+import sys
+sys.path.append("..")
+from src import iso
+import os
+import time
+
+os.chdir("..")
+
+
+logfile=None
+
+try:
+    if not (sys.argv[1] == "amd64" or sys.argv[1] == "i386"):
+        print("Oops, something wrong, we only support amd64 or i386")
+        sys.exit(1)
+except IndexError:
+    print("Oops, something wrong, we only support amd64 or i386")
+    sys.exit(1)
+
+
+if len(sys.argv) == 1:
+    arch="amd64"
+else:
+    arch = sys.argv[1]
+
+N=iso.IsoBuilder('build', '/home/isobuilder/pyisobuilder/conf/new-kernel/data', '/home/isobuilder/pyisobuilder/conf/new-kernel/config', 'trusty', arch, '/home/isobuilder/pyisobuilder/debootstrap', logfile, tmpfs_size='8g')
+try:
+    N.create_debootstrap()
+    N.make_desktop()
+    N.custom_desktop()
+
+    if arch == 'amd64':
+        N.prepare_cdrom_repository(include_packages=['grub-pc', 'grub-efi', 'grub-efi-amd64-signed', 'linux-signed-generic','linux-firmware-nonfree', 'rtl8723au-dkms'])
+    
+    if arch == 'i386':
+        N.prepare_cdrom_repository(include_packages=['grub-pc','linux-firmware-nonfree','rtl8723au-dkms'])
+    
+    #N.prepare_overlay_squashfs()
+    N.prepare_iso()
+    output_path = os.path.join('/home/isobuilder/pyisobuilder','output','new-kernel',time.strftime("%Y%m%d",time.localtime()))
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    iso_fullpath=os.path.join(output_path,'deepin-new-kernel-%s.iso' % arch)
+    N.make_iso(imgname=iso_fullpath)
+    N.make_dailylink(output_path)
+finally:
+    N.clean()

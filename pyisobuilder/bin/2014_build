@@ -1,0 +1,58 @@
+#! /usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+
+import sys
+import os
+os.chdir(os.path.dirname(__file__))
+sys.path.append("..")
+from src import iso
+import time
+import datetime
+
+os.environ['PATH']='/home/isobuilder/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin'
+
+os.chdir("..")
+
+
+try:
+    if not (sys.argv[1] == "amd64" or sys.argv[1] == "i386"):
+        print("Oops, something wrong, we only support amd64 or i386")
+        sys.exit(1)
+except IndexError:
+    print("Oops, something wrong, we only support amd64 or i386")
+    sys.exit(1)
+
+if len(sys.argv) == 1:
+    arch="amd64"
+else:
+    arch = sys.argv[1]
+
+time_stamp=datetime.datetime.now().strftime("%Y%m%d")
+logfile="pyisobuilder-{}-{}-{}.log".format('trusty', arch, time_stamp)
+logfile_fullpath=os.path.join('/home/isobuilder/pyisobuilder/2014/log', logfile)
+
+N=iso.IsoBuilder('build', '/home/isobuilder/pyisobuilder/2014/data', '/home/isobuilder/pyisobuilder/2014/config', 'trusty', arch, '/home/isobuilder/pyisobuilder/debootstrap', logfile_fullpath, tmpfs_size='8g')
+try:
+    N.create_debootstrap(overlay_packages={'udev', 'initscripts'})
+    N.make_desktop()
+    N.custom_desktop()
+
+    if arch == 'amd64':
+        N.prepare_cdrom_repository(include_packages=['grub-pc', 'grub-efi', 'grub-efi-amd64-signed', 'linux-signed-generic','linux-firmware-nonfree', 'rtl8723au-dkms'])
+    
+    if arch == 'i386':
+        N.prepare_cdrom_repository(include_packages=['grub-pc','linux-firmware-nonfree','rtl8723au-dkms'])
+    
+    N.prepare_overlay_squashfs()
+    N.prepare_iso()
+    output_path = os.path.join('/home/isobuilder/pyisobuilder','output','daily-live','desktop',time.strftime("%Y%m%d",time.localtime()))
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    iso_fullpath=os.path.join(output_path,'deepin-desktop-%s.iso' % arch)
+    N.make_iso(imgname=iso_fullpath, enable_ia32efi=True)
+    N.make_dailylink(output_path)
+except Exception as e:
+    print e
+finally:
+    N.clean()

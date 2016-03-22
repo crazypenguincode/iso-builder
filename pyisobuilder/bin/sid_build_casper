@@ -1,0 +1,33 @@
+#! /usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+
+import os
+import sys
+sys.path.append("..")
+from src import iso
+import time
+
+logfile=None
+os.chdir("..")
+
+try:
+    arch=sys.argv[1]
+except:
+    print("Oops,error detect.Treat default arch as amd64")
+    arch='amd64'
+N=iso.IsoBuilder('build', '/home/isobuilder/pyisobuilder/conf/sid/data', '/home/isobuilder/pyisobuilder/conf/sid/config', '2015', arch, '/home/isobuilder/pyisobuilder/debootstrap', logfile, tmpfs_size='8g', live_boot='casper')
+try:
+    N.create_debootstrap(debootstrap_mirror="http://10.0.0.12/deepin-2015")
+    N.make_desktop()
+    N.custom_desktop()
+    N.prepare_iso()
+    N.prepare_cdrom_repository(include_packages=['grub-pc', 'grub-efi'])
+    output_path = os.path.join('/home/isobuilder/pyisobuilder','output','sid',time.strftime("%Y%m%d",time.localtime()))
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    iso_fullpath=os.path.join(output_path,'deepin-sid-%s.iso' % arch)
+    N.make_iso(imgname=iso_fullpath)
+    N.make_dailylink(output_path)
+finally:
+    N.clean()

@@ -1,0 +1,39 @@
+#! /usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+
+import os
+import sys
+os.chdir(os.path.dirname(__file__))
+sys.path.append("..")
+from src import iso
+import time
+import datetime
+
+os.environ['PATH']='/home/isobuilder/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin'
+
+
+logfile=None
+os.chdir("..")
+
+try:
+    arch=sys.argv[1]
+except:
+    print("Oops,error detect.Treat default arch as amd64")
+    arch='amd64'
+N=iso.IsoBuilder('build', '/home/isobuilder/pyisobuilder/conf/college-new/data', '/home/isobuilder/pyisobuilder/conf/college-new/config', 'unstable', arch, '/home/isobuilder/pyisobuilder/debootstrap', logfile, tmpfs_size='8g', live_boot='live')
+try:
+    N.create_debootstrap(debootstrap_mirror="http://mirrors.corp.deepin.com/2015")
+    N.make_desktop()
+    N.custom_desktop()
+    N.prepare_overlay_squashfs(dest="overlay")
+    N.prepare_cdrom_repository(include_packages=['grub-pc', 'grub-efi'])
+    N.prepare_iso()
+    output_path = os.path.join('/home/isobuilder/pyisobuilder','output','college-2015',time.strftime("%Y%m%d",time.localtime()))
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    iso_fullpath=os.path.join(output_path,'deepin-college-2015-%s.iso' % arch)
+    N.make_iso(imgname=iso_fullpath)
+    N.make_dailylink(output_path)
+finally:
+    N.clean()
