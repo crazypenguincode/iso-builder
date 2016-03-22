@@ -10,7 +10,7 @@ from src import iso
 import time
 import datetime
 
-os.environ['PATH']='/data/pyisobuilder/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin'
+os.environ['PATH']='.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin'
 
 
 logfile=None
@@ -21,7 +21,7 @@ try:
 except:
     print("Oops,error detect.Treat default arch as amd64")
     arch='amd64'
-N=iso.IsoBuilder('build', '/data/pyisobuilder/conf/2015/data', '/data/pyisobuilder/conf/2015/config', 'unstable', arch, '/data/pyisobuilder/debootstrap', logfile, tmpfs_size='8g', live_boot='live')
+N=iso.IsoBuilder('build', 'conf/2015/data', 'conf/2015/config', 'unstable', arch, 'debootstrap', logfile, tmpfs_size='8g', live_boot='live')
 try:
     N.create_debootstrap(debootstrap_mirror="http://pools.corp.deepin.com/deepin")
     N.make_desktop()
@@ -32,7 +32,7 @@ try:
     else:
         N.prepare_cdrom_repository(include_packages=['grub-pc'])
     N.prepare_iso()
-    output_path = os.path.join('/data/pyisobuilder','output','2015',time.strftime("%Y%m%d",time.localtime()))
+    output_path = os.path.join('%s','output','2015',time.strftime("%Y%m%d",time.localtime()))  % os.path.abspath(os.getcwd())
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     iso_fullpath=os.path.join(output_path,'deepin-2015-%s.iso' % arch)
