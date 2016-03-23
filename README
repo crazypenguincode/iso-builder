@@ -5,4 +5,4 @@ pyisobuilder/conf/2015/config/packages.list —— 预装软件列表
 
 
 need packages:
-debootstrap xorriso squashfs-tools isolinux dosfstools mtools
+debootstrap xorriso squashfs-tools isolinux dosfstools mtools unionfs-fuse 
