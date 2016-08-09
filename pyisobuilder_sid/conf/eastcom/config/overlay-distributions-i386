@@ -1,0 +1,7 @@
+Origin: LinuxDeepin
+Label: Overlay
+Codename: trusty
+Version: dummy
+Architectures: i386
+Components: main
+Description: Linuxdeepin overlay mirror

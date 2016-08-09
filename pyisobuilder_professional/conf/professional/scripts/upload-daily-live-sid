@@ -1,0 +1,9 @@
+#!/bin/bash
+
+DAILY_LIVE_DIR="$HOME/pyisobuilder/output/professional/"
+
+echo "upload professional iso "
+rsync -rtlvp --progress $DAILY_LIVE_DIR/ cdimage:/data/iso/iso-oder/professional/
+echo "deleting old archives ..."
+find $DAILY_LIVE_DIR -type d -ctime +3
+find $DAILY_LIVE_DIR -type d -ctime +3 -exec rm -rf {} \;
