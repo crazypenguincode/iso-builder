@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "RUN J50-do-efi-boot.sh"
 set -e
 CONF_PATH=$1
 ISO_BUILD_PATH=$2

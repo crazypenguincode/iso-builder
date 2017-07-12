@@ -20,7 +20,7 @@ apt-get -y --force-yes --allow-unauthenticated install samba attr logrotate samb
 apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install samsung-print
 
 # deepin.com.qq.im　缺少依赖包安装
-#apt-get -y --force-yes --allow-unauthenticated install deepin-fonts-wine i965-va-driver:i386 libasound2-plugins:i386 libavcodec57:i386 libavresample3:i386 libavutil55:i386 libcairo2:i386 libcrystalhd3:i386 libfontconfig1:i386 libgomp1:i386 libgsm1:i386 libjack-jackd2-0:i386 libmp3lame0:i386 libnuma1:i386 libopenjp2-7:i386 libopus0:i386 liborc-0.4-0:i386 libpixman-1-0:i386 libsamplerate0:i386 libschroedinger-1.0-0:i386 libshine3:i386 libsnappy1v5:i386 libsoxr0:i386 libspeex1:i386 libspeexdsp1:i386 libswresample2:i386 libtheora0:i386 libtwolame0:i386 libva-drm1:i386 libva-x11-1:i386 libva1:i386 libvdpau-va-gl1:i386 libvdpau1:i386 libvpx4:i386 libwavpack1:i386 libwebp6:i386 libwebpmux2:i386 libx264-148:i386 libx265-95:i386 libxcb-render0:i386 libxcb-shm0:i386 libxvidcore4:i386 libzvbi0:i386 mesa-va-drivers:i386 mesa-vdpau-drivers:i386 va-driver-all:i386 vdpau-driver-all:i386 p11-kit-modules:i386 
+apt-get -y --force-yes --allow-unauthenticated install deepin-fonts-wine i965-va-driver:i386 libasound2-plugins:i386 libavcodec57:i386 libavresample3:i386 libavutil55:i386 libcairo2:i386 libcrystalhd3:i386 libfontconfig1:i386 libgomp1:i386 libgsm1:i386 libjack-jackd2-0:i386 libmp3lame0:i386 libnuma1:i386 libopenjp2-7:i386 libopus0:i386 liborc-0.4-0:i386 libpixman-1-0:i386 libsamplerate0:i386 libschroedinger-1.0-0:i386 libshine3:i386 libsnappy1v5:i386 libsoxr0:i386 libspeex1:i386 libspeexdsp1:i386 libswresample2:i386 libtheora0:i386 libtwolame0:i386 libva-drm1:i386 libva-x11-1:i386 libva1:i386 libvdpau-va-gl1:i386 libvdpau1:i386 libvpx4:i386 libwavpack1:i386 libwebp6:i386 libwebpmux2:i386 libx264-148:i386 libx265-95:i386 libxcb-render0:i386 libxcb-shm0:i386 libxvidcore4:i386 libzvbi0:i386 mesa-va-drivers:i386 mesa-vdpau-drivers:i386 va-driver-all:i386 vdpau-driver-all:i386 p11-kit-modules:i386 
 
 # 密匙环问题
 #apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install seahorse-daemon
@@ -54,7 +54,7 @@ if [ "$arch" = "i386" ];then
 fi
 
 apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install linux-image-deepin-${_arch} linux-headers-deepin-${_arch}
-apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install bcmwl-kernel-source 
+apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install bcmwl-kernel-source
 
 # fix aufs missing in 4.0 kernel
 _kernel_version=$(dpkg-query -W -f='${Version}' linux-image-deepin-${_arch})

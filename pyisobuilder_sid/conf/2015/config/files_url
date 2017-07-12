@@ -1,4 +1,6 @@
-https://ci.deepin.io/job/deepin-boot-maker-win32-release/lastSuccessfulBuild/artifact/build/app/deepin-boot-maker.exe
-https://ci.deepin.io/job/deepin-system-installer-win32-release/lastSuccessfulBuild/artifact/build/app/deepin-system-installer.exe
-https://ci.deepin.io/job/deepin-boot-maker-osx-release/lastSuccessfulBuild/artifact/source/osx/app/deepin-boot-maker.zip
-http://pools.corp.deepin.com/ppa/deepin-cloud-print/DeepinCloudPrintServerInstaller_1.0.0.1.exe
+http://pools.corp.deepin.com/testing/gs/iso_file/DeepinCloudPrintServerInstaller_1.0.0.1.exe
+http://pools.corp.deepin.com/testing/gs/iso_file/DeepinCloudScanServerInstaller_1.0.0.1.exe
+http://pools.corp.deepin.com/testing/gs/iso_file/deepin-boot-maker.exe
+http://pools.corp.deepin.com/testing/gs/iso_file/deepin-boot-maker.zip
+http://pools.corp.deepin.com/testing/gs/iso_file/deepin-system-installer.exe
+http://pools.corp.deepin.com/testing/gs/iso_file/md5check.sh

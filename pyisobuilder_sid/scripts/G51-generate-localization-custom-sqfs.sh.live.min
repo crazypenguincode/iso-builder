@@ -57,7 +57,7 @@ gen_overlay() {
         delta_file chinese-special-framework ${base_chroot_path} "im-config fcitx fcitx-config-gtk fcitx-frontend-gtk2 fcitx-frontend-gtk3 fcitx-frontend-qt4 fcitx-frontend-qt5 fcitx-modules fcitx-module-kimpanel fcitx-module-lua fcitx-module-x11 fcitx-module-dbus"
     	echo "overlay-chinese-special-framework.squashfs" >> ${ISO_BUILD_PATH}/${DEST_PATH}/filesystem.zh-hans.module
     	baseroot=${ISO_BUILD_PATH}/${DEST_PATH}/chinese-special-framework-fakeroot
-    	delta_file language-pack-zh-hans ${baseroot} "fcitx-sogoupinyin-uk fcitx-table-wbpy thunderbird-locale-zh-hans deepin.com.qq.im netease-cloud-music youdao-dict fonts-adobe-source-han-serif-cn"
+    	delta_file language-pack-zh-hans ${baseroot} "fcitx-sogoupinyin-uk fcitx-table-wbpy  fonts-adobe-source-han-serif-cn"
     	echo "overlay-language-pack-zh-hans.squashfs" >> ${ISO_BUILD_PATH}/${DEST_PATH}/filesystem.zh-hans.module
         ;;
         en_US)

@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "Run J51-do-regular-boot.sh"
 ISO_BUILD_PATH=$1
 ISO_FILE=$2
 

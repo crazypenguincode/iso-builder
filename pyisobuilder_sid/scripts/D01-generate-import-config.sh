@@ -46,7 +46,7 @@ sudo rm -rf ${CHROOT_PATH}/root/packages.list
 echo "[INFO] Install DEFAULT_PUBLIC_PACKAGES Done"
 
 chroot_do ${CHROOT_PATH} aptitude unmarkauto ~M
-
+chroot_do ${CHROOT_PATH} apt-get update
 chroot_do ${CHROOT_PATH} apt-get install \
     --no-install-recommends -y --force-yes \
     --allow-unauthenticated \

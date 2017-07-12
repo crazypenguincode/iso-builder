@@ -54,7 +54,7 @@ if [ "$arch" = "i386" ];then
 fi
 
 apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install linux-image-deepin-${_arch} linux-headers-deepin-${_arch}
-apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install bcmwl-kernel-source 
+apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install bcmwl-kernel-source
 
 # fix aufs missing in 4.0 kernel
 _kernel_version=$(dpkg-query -W -f='${Version}' linux-image-deepin-${_arch})

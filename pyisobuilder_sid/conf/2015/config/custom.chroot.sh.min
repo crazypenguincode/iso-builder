@@ -3,18 +3,18 @@
 echo "*****************custom.chroot.sh***************************"
 
 # add i386 architecture
-dpkg --add-architecture i386
-if [[ -f /etc/apt/sources.list.d/google-chrome.list ]]; then rm -f /etc/apt/sources.list.d/google-chrome.list ; fi
+#dpkg --add-architecture i386
+#if [[ -f /etc/apt/sources.list.d/google-chrome.list ]]; then rm -f /etc/apt/sources.list.d/google-chrome.list ; fi
 
 #disable google-chrome-stable hardware acceleration
-echo "disable google-chrome hardware acceleration"
-mkdir -p /etc/opt/chrome/policies/recommended
-echo -e "{\n\t\"HardwareAccelerationModeEnabled\": false\n}" > /etc/opt/chrome/policies/recommended/disable-hardware-acceleration.json
+#echo "disable google-chrome hardware acceleration"
+#mkdir -p /etc/opt/chrome/policies/recommended
+#echo -e "{\n\t\"HardwareAccelerationModeEnabled\": false\n}" > /etc/opt/chrome/policies/recommended/disable-hardware-acceleration.json
 
 
 apt-get update
 #apt-get --no-install-recommends -y --force-yes --allow-unauthenticated upgrade
-apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install crossover-deepin:i386 deepin-wine-uninstaller:i386
+#apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install crossover-deepin:i386 deepin-wine-uninstaller:i386
 apt-get -y --force-yes --allow-unauthenticated install samba attr logrotate samba-dsdb-modules samba-vfs-modules
 #samsung-print
 apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install samsung-print
@@ -54,7 +54,7 @@ if [ "$arch" = "i386" ];then
 fi
 
 apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install linux-image-deepin-${_arch} linux-headers-deepin-${_arch}
-apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install bcmwl-kernel-source 
+apt-get --no-install-recommends -y --force-yes --allow-unauthenticated install bcmwl-kernel-source
 
 # fix aufs missing in 4.0 kernel
 _kernel_version=$(dpkg-query -W -f='${Version}' linux-image-deepin-${_arch})

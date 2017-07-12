@@ -1,18 +1,18 @@
 export DISTRO_NAME=deepin
-export VERSION=Deepin15.4
+export VERSION=Deepin15.3
 
-export CODENAME="panda"
+export CODENAME="unstable"
 export DEEPIN_APTKEY_URL="http://pools.corp.deepin.com/deepin/project/pubring.gpg"
 
 MULTIARCH="i386"
 
 export SOURCES_LIST="# Generate by isobuilder
-deb http://pools.corp.deepin.com/deepin panda main contrib non-free
-deb http://pools.corp.deepin.com/ppa/dde unstable main contrib non-free
+deb http://pools.corp.deepin.com/deepin unstable main contrib non-free
+deb-src http://pools.corp.deepin.com/deepin unstable main contrib non-free
 "
 ISO_SOURCES_LIST="# Generate by isobuilder
-deb  [by-hash=force] http://packages.deepin.com/deepin panda main contrib non-free
-#deb-src http://packages.deepin.com/deepin panda main contrib non-free
+deb  [by-hash=force] http://packages.deepin.com/deepin unstable main contrib non-free
+#deb-src http://packages.deepin.com/deepin unstable main contrib non-free
 "
 
 BASE_PACKAGES="less plymouth man-db sudo user-setup"
