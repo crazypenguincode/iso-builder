@@ -37,6 +37,6 @@ try:
         os.makedirs(output_path)
     iso_fullpath=os.path.join(output_path,'deepin-sid-%s.iso' % arch)
     N.make_iso(imgname=iso_fullpath, label="Deepin 2015", application="Deepin LiveCD")
-    N.make_dailylink(output_path)
+    #N.make_dailylink(output_path)
 finally:
     N.clean()
