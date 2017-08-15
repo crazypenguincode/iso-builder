@@ -1,0 +1,8 @@
+How to build 2015 ISO:
+pyisobuilder/bin/2015_build  amd64/i386
+
+pyisobuilder/conf/2015/config/packages.list —— 预装软件列表 
+
+
+build iso need packages:
+debootstrap xorriso squashfs-tools isolinux dosfstools mtools unionfs-fuse reprepro syslinux psmisc python

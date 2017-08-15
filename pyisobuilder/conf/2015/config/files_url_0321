@@ -1,0 +1,5 @@
+https://ci.deepin.io/job/deepin-boot-maker-win32-release/lastSuccessfulBuild/artifact/build/app/release/deepin-boot-maker.exe
+https://ci.deepin.io/job/deepin-system-installer-win32-release/lastSuccessfulBuild/artifact/build/app/release/deepin-system-installer.exe
+https://ci.deepin.io/job/deepin-boot-maker-osx-release/lastSuccessfulBuild/artifact/source/osx/app/deepin-boot-maker.zip
+http://pools.corp.deepin.com/ppa/deepin-cloud-print/DeepinCloudPrintServerInstaller_1.0.0.1.exe
+https://ci.deepin.io/job/deepin-cloud-scan-server-win32-release/lastSuccessfulBuild/artifact/source/Release/DeepinCloudScanServerInstaller_1.0.0.1.exe

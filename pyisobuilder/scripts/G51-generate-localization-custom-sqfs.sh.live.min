@@ -1,0 +1,115 @@
+#!/bin/bash
+# Depends unionfs-utils
+# fix me soon, work not right
+echo "*************G51-generate-localization-custom-sqfs.sh.live************"
+echo "**********************************************************************"
+trap clean_workspace ERR TERM EXIT KILL
+
+source common
+
+CHROOT_PATH=$1
+ISO_BUILD_PATH=$2
+DEST_PATH=$3
+shift 3
+LANGS=$@
+
+base_chroot_path=${CHROOT_PATH}
+
+delta_file() {
+    local L=$1
+    local BASEROOT=$2
+    shift 2
+    local packages=$@
+    # should work with casper packages. debian should be in live
+    local sqfs_file="overlay-${L}.squashfs"
+    #[[ -e ${ISO_BUILD_PATH}/${DEST_PATH}/$sqfs_file ]] && { echo "[WARING] Job has done before.Exit..." ; return; }
+    local overlay_filesytem=${ISO_BUILD_PATH}/${DEST_PATH}/${L}
+    local fake_chroot_path=${overlay_filesytem}-fakeroot
+    [[ -d $fake_chroot_path ]] && { echo "[WARING] Job has done before.Exit..." ; return; }
+    mkdir -p $overlay_filesytem
+    mkdir -p $fake_chroot_path
+    sudo unionfs-fuse -o cow -o noinitgroups -o default_permissions -o allow_other -o use_ino -o suid $overlay_filesytem=RW:$BASEROOT=RO "$fake_chroot_path"
+    prechroot $fake_chroot_path
+    chroot_do $fake_chroot_path apt-get update
+    chroot_do $fake_chroot_path apt-get install \
+        --no-install-recommends -y --force-yes --allow-unauthenticated \
+        $packages
+    postchroot $fake_chroot_path
+}
+
+umount_all() {
+    CUR_DIR=$(readlink -f $1)
+    declare -a queue
+    queue=("language-pack" "office" "framework")
+    for var in ${queue[@]};do
+	lines=$(mount | awk '{print $3}' | grep ${CUR_DIR} | grep ${var} | sort -r)
+	for dir in ${lines};do
+	    sudo fusermount -u $dir
+	done
+    done
+}
+
+gen_overlay() {
+    LANG=$1
+    case $LANG in
+        zh_CN)
+    	echo "[INFO] Generate $LANG --> chinese-special-framework"
+        delta_file chinese-special-framework ${base_chroot_path} "im-config fcitx fcitx-config-gtk fcitx-frontend-gtk2 fcitx-frontend-gtk3 fcitx-frontend-qt4 fcitx-frontend-qt5 fcitx-modules fcitx-module-kimpanel fcitx-module-lua fcitx-module-x11 fcitx-module-dbus"
+    	echo "overlay-chinese-special-framework.squashfs" >> ${ISO_BUILD_PATH}/${DEST_PATH}/filesystem.zh-hans.module
+    	baseroot=${ISO_BUILD_PATH}/${DEST_PATH}/chinese-special-framework-fakeroot
+    	delta_file language-pack-zh-hans ${baseroot} "fcitx-sogoupinyin-uk fcitx-table-wbpy  fonts-adobe-source-han-serif-cn"
+    	echo "overlay-language-pack-zh-hans.squashfs" >> ${ISO_BUILD_PATH}/${DEST_PATH}/filesystem.zh-hans.module
+        ;;
+        en_US)
+    	echo "[INFO]  Generate $LANG now "
+    	delta_file language-pack-en-us ${base_chroot_path} "spotify-client skype"
+    	echo "overlay-language-pack-en-us.squashfs" >> ${ISO_BUILD_PATH}/${DEST_PATH}/filesystem.en-us.module
+        ;;
+        zh_TW)
+    	echo "[INFO] Generate $LANG --> chinese-special-framework"
+        delta_file chinese-special-framework ${base_chroot_path} "im-config fcitx fcitx-config-gtk fcitx-frontend-gtk2 fcitx-frontend-gtk3 fcitx-frontend-qt4 fcitx-frontend-qt5 fcitx-modules fcitx-module-kimpanel fcitx-module-lua fcitx-module-x11 fcitx-module-dbus"
+    	echo "overlay-chinese-special-framework.squashfs" >> ${ISO_BUILD_PATH}/${DEST_PATH}/filesystem.zh-hant.module
+    	baseroot=${ISO_BUILD_PATH}/${DEST_PATH}/chinese-special-framework-fakeroot
+    	delta_file language-pack-zh-hant ${baseroot} "fcitx-chewing fcitx-table-cangjie-big fcitx-ui-classic  thunderbird-locale-zh-hant fonts-adobe-source-han-serif-tw"
+    	echo "overlay-language-pack-zh-hant.squashfs" >> ${ISO_BUILD_PATH}/${DEST_PATH}/filesystem.zh-hant.module
+        ;;
+        *)
+    	echo "Not support $LANG"
+    	;;
+    esac
+}
+
+gen_sqfs() {
+    for dir in $(find ${ISO_BUILD_PATH}/${DEST_PATH}/ -mindepth 1 -maxdepth 1 -type d | grep -v fakeroot);do
+	#so ugly to use basename
+	echo " ===> Generate ${dir} -> $(dirname ${dir})/overlay-$(basename ${dir}).squashfs"
+	local sqfs_file=overlay-$(basename "${dir}").squashfs
+	for i in $(ls $dir/var/lib | grep -v dpkg);do sudo rm -rf $dir/var/lib/$i; done
+	sudo rm -rf $dir/var/cache
+	sudo rm -rf $dir/var/log
+	sudo rm -rf $dir/tmp
+	sudo rm -rf $dir/run
+	find $dir -maxdepth 1 -name ".[^.]*" -type d -exec sudo rm -rf \{\} \;
+	find $dir -name "*.cache" -exec sudo rm -f \{\} \;
+	sudo mksquashfs $dir ${ISO_BUILD_PATH}/${DEST_PATH}/$sqfs_file -comp xz
+    done
+}
+clean_workspace() {
+    # bad action. fix me soon.
+    umount_all ${ISO_BUILD_PATH}/${DEST_PATH} || true
+    echo "[XXOO] Again to Make sure clean"
+    umount_all ${ISO_BUILD_PATH}/${DEST_PATH} || true
+    echo "[OOXX] Again to Make sure clean"
+    echo "  ==> Cleaning mounting directories..."
+    find ${ISO_BUILD_PATH}/${DEST_PATH} -mindepth 1 -maxdepth 1 -type d -exec sudo rm -rf \{\} \;
+}
+while [ -n "$*" ];do
+    echo "[INFO] Genereating overlay squashfs for $1..."
+    gen_overlay $1
+    shift
+done
+
+echo "[INFO] Cheers, Seem works all right!"
+gen_sqfs
+echo "[INFO] Lucky, Clean all unused files"
+clean_workspace
