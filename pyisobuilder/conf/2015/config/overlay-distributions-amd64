@@ -1,0 +1,7 @@
+Origin: LinuxDeepin
+Label: Overlay
+Codename: unstable
+Version: dummy
+Architectures: amd64 i386
+Components: main
+Description: Linuxdeepin overlay mirror

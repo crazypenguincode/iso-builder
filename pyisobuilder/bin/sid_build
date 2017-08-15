@@ -1,0 +1,44 @@
+#! /usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+
+import os
+import sys
+os.chdir(os.path.dirname(__file__))
+sys.path.append("..")
+from src import iso
+import time
+import datetime
+
+os.environ['PATH']='.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin'
+
+
+logfile=None
+os.chdir("..")
+
+try:
+    arch=sys.argv[1]
+except:
+    print("Oops,error detect.Treat default arch as amd64")
+    arch='amd64'
+N=iso.IsoBuilder('build', 'conf/2015/data', 'conf/2015/config', 'unstable', arch, 'debootstrap', logfile, tmpfs_size='8g', live_boot='live')
+try:
+    N.create_debootstrap(debootstrap_mirror="http://pools.corp.deepin.com/deepin")
+    N.make_desktop()
+    N.custom_desktop()
+    N.prepare_overlay_squashfs(dest="overlay")
+    if arch == "amd64":
+        N.prepare_cdrom_repository(include_packages=['grub-pc', 'grub-efi-amd64', 'grub-efi-amd64-signed', 'mokutil', 'shim', 'shim-signed', 'grub-efi-ia32'])
+    else:
+        N.prepare_cdrom_repository(include_packages=['grub-pc'])
+    N.prepare_iso()
+    output_path = os.path.join('%s','output','sid',time.strftime("%Y%m%d",time.localtime()))  % os.path.abspath(os.getcwd())
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    iso_name = 'deepin-sid-%s-%s.iso' % (arch,time.strftime("%Y%m%d-%H%M",time.localtime()))
+    iso_fullpath=os.path.join(output_path,iso_name)
+    N.make_iso(imgname=iso_fullpath, label="Deepin 2015", application="Deepin LiveCD")
+    iso_path = os.path.join(output_path, iso_name)
+    N.make_dailylink(iso_path, arch)
+finally:
+    N.clean()
