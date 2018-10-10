@@ -1,0 +1,3 @@
+#!/bin/bash
+ssh iso /home/mirror/pxe.bin/update-deepin-sid-pxe.sh amd64
+ssh iso /home/mirror/pxe.bin/update-deepin-sid-pxe.sh i386

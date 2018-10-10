@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DAILY_LIVE_DIR="$HOME/pyisobuilder/output/2015/"
+
+echo "upload daily iso to pxe server ..."
+rsync -rtlvp --progress $DAILY_LIVE_DIR/ cdimage:/data/iso/daily-live-2015/
+echo ""
+echo "deleting old archives ..."
+find $DAILY_LIVE_DIR -type d -ctime +3
+find $DAILY_LIVE_DIR -type d -ctime +3 -exec rm -rf {} \;
+echo ""
+echo "udpate pxe server"
+ssh cdimage "~/pxe.bin/update-deepin-2015-pxe.sh amd64 i386"
+echo ""
